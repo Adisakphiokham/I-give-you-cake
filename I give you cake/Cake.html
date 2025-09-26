@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I give you cake</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9a8c7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+    }
+
+    .cake-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .cake {
+      position: relative;
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .layer {
+      width: 100%;
+      height: 45px;
+      background: linear-gradient(to bottom, #5c3317, #3e2210);
+      border-radius: 8px;
+      margin-top: -8px;
+      box-shadow: 0 3px 0 #2a140a;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .cream {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: #f5e1d3;
+      border-radius: 20px 20px 10px 10px;
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .cream::before,
+    .cream::after {
+      content: "";
+      position: absolute;
+      top: 25px;
+      width: 28px;
+      height: 50px;
+      background: #f5e1d3;
+      border-radius: 50px;
+      opacity: 0;
+    }
+
+    .cream::before {
+      left: 40px;
+      height: 60px;
+    }
+
+    .cream::after {
+      left: 120px;
+      height: 40px;
+    }
+
+    .candle {
+      width: 10px;
+      height: 40px;
+      background: repeating-linear-gradient(-45deg,
+          #ffffff,
+          #ffffff 6px,
+          #ff66b2 6px,
+          #ff66b2 12px);
+      border-radius: 3px;
+      position: absolute;
+      top: -65px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      z-index: 3;
+      opacity: 0;
+    }
+
+    .flame {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 22px;
+      background: radial-gradient(ellipse at center, #ffdf00 0%, #ff9900 70%, transparent 80%);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .topping {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at 30% 30%, #ff4d4d, #b30000);
+      border-radius: 50%;
+      top: -20px;
+      z-index: 4;
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .topping::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 7px;
+      width: 6px;
+      height: 10px;
+      background: green;
+      border-radius: 50%;
+      transform: rotate(-20deg);
+    }
+
+    .t1 {
+      left: 40px;
+    }
+
+    .t2 {
+      left: 80px;
+    }
+
+    .t3 {
+      left: 130px;
+    }
+
+    .message {
+      position: absolute;
+      top: -6cm;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      opacity: 0;
+    }
+
+    .message h2,
+    .message p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 26px;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 1000% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 8s linear infinite, glowText 1s infinite alternate;
+    }
+
+    .message p {
+      font-size: 18px;
+      font-weight: normal;
+      animation: rainbow 8s linear infinite, glowText 1.2s infinite alternate;
+    }
+
+    button,
+    input {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #ff66b2;
+      color: white;
+      cursor: pointer;
+    }
+
+    input {
+      border: 2px solid #ff66b2;
+      outline: none;
+      text-align: center;
+    }
+
+    /* ===== Animation ===== */
+    .animate .layer {
+      animation: riseUp 1s forwards;
+    }
+
+    .animate .layer:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .animate .layer:nth-child(2) {
+      animation-delay: 0.6s;
+    }
+
+    .animate .layer:nth-child(3) {
+      animation-delay: 1s;
+    }
+
+    .animate .cream,
+    .animate .cream::before,
+    .animate .cream::after {
+      animation: fadeIn 1s forwards;
+      animation-delay: 1.5s;
+    }
+
+    .animate .candle {
+      animation: riseUp 1s forwards;
+      animation-delay: 2.2s;
+    }
+
+    .animate .flame {
+      animation: fadeIn 1s forwards, flicker 0.3s infinite alternate;
+      animation-delay: 3s;
+    }
+
+    .animate .topping {
+      animation: popIn 0.8s ease forwards;
+    }
+
+    .animate .t1 {
+      animation-delay: 2.5s;
+    }
+
+    .animate .t2 {
+      animation-delay: 2.8s;
+    }
+
+    .animate .t3 {
+      animation-delay: 3.1s;
+    }
+
+    .animate .message {
+      animation: bounceUp 1.2s ease forwards;
+      animation-delay: 3.8s;
+    }
+
+    @keyframes riseUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes flicker {
+      from {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.9;
+      }
+
+      to {
+        transform: translateX(-50%) scale(1.2);
+        opacity: 1;
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bounceUp {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 20px) scale(0.8);
+      }
+
+      60% {
+        opacity: 1;
+        transform: translate(-50%, -10px) scale(1.1);
+      }
+
+      80% {
+        transform: translate(-50%, 5px) scale(0.95);
+      }
+
+      100% {
+        transform: translate(-50%, 0) scale(1);
+      }
+    }
+
+    @keyframes glowText {
+      0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff66b2, 0 0 20px #ff3399;
+      }
+
+      100% {
+        text-shadow: 0 0 10px #ffff66, 0 0 20px #ffcc00, 0 0 30px #ff6600;
+      }
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cake-wrapper" id="cake">
+    <div class="cake">
+      <div class="layer"></div>
+      <div class="layer"></div>
+      <div class="layer"></div>
+
+      <div class="cream"></div>
+
+      <div class="topping t1"></div>
+      <div class="topping t2"></div>
+      <div class="topping t3"></div>
+
+      <div class="candle">
+        <div class="flame"></div>
+      </div>
+    </div>
+
+    <div class="message">
+      <h2>Happy Birthday!</h2>
+      <p id="nameText">To Me ( •̀ ω •́ )y</p>
+    </div>
+  </div>
+
+  <!-- ช่องใส่ชื่อ -->
+  <input type="text" id="nameInput" placeholder="ลงชื่อเพื่อรับเค้กฟรี 🎉">
+
+  <!-- ปุ่มกด -->
+  <button onclick="playAnimation()">🎉 คลิกเพื่อรับเค้กฟรี 🎂</button>
+
+  <!-- เสียง -->
+  <audio id="song" src="birthday.mp3" hidden></audio>
+  <audio id="blow" src="blow.mp3" hidden></audio>
+
+  <script>
+    function playAnimation() {
+      const cake = document.getElementById("cake");
+      const nameInput = document.getElementById("nameInput").value.trim();
+      const nameText = document.getElementById("nameText");
+
+      // ตั้งข้อความ
+      if (nameInput) {
+        nameText.textContent = "สุขสันต์วันเกิดน่าาาาาา " + nameInput + " ( •̀ ω •́ )y 🎂";
+      } else {
+        nameText.textContent = "To Me ( •̀ ω •́ )y";
+      }
+
+      // reset animation
+      cake.classList.remove("animate");
+      void cake.offsetWidth;
+      cake.classList.add("animate");
+
+      // เล่นเพลง
+      const song = document.getElementById("song");
+      try {
+        song.currentTime = 0;
+        song.play();
+      } catch (e) {
+        console.log("ไม่สามารถเล่นเพลงได้:", e);
+      }
+
+      // เล่นเสียงเป่าเทียนหลัง 7 วิ
+      const blow = document.getElementById("blow");
+      setTimeout(() => {
+        try {
+          blow.currentTime = 0;
+          blow.play();
+        } catch (e) {
+          console.log("ไม่สามารถเล่นเสียงเป่าเทียนได้:", e);
+        }
+      }, 7000);
+    }
+  </script>
+
+  <footer>
+    <div class="copyright">
+      © Created by Adisak Phiokham (Keng)
+    </div>
+  </footer>
+</body>
+
+</html>
